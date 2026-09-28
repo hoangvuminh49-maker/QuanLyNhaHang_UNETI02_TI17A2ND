@@ -1,0 +1,58 @@
+@model List<TaiKhoan>
+@{
+    ViewData["Title"] = "Quản lý tài khoản";
+}
+
+<div class="page-header">
+    <h2>Quản lý tài khoản</h2>
+    <a asp-action="Create" class="btn btn-primary">+ Thêm tài khoản</a>
+</div>
+
+<form method="get" asp-action="Index" class="search-form">
+    <input type="text" name="tuKhoa" value="@ViewBag.TuKhoa" class="form-control" placeholder="Tìm theo tên đăng nhập / họ tên..." />
+    <button type="submit" class="btn btn-secondary">Tìm kiếm</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên đăng nhập</th>
+            <th>Họ tên</th>
+            <th>Email</th>
+            <th>Vai trò</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tk in Model)
+        {
+            <tr>
+                <td>@tk.TenDangNhap</td>
+                <td>@tk.HoTen</td>
+                <td>@tk.Email</td>
+                <td>@tk.VaiTro</td>
+                <td>
+                    @if (tk.TrangThai)
+                    {
+                        <span class="badge badge-success">Hoạt động</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-danger">Đã khóa</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@tk.MaTaiKhoan" class="btn btn-sm btn-info">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@tk.MaTaiKhoan" class="btn btn-sm btn-warning">Sửa</a>
+                    <form asp-action="DoiTrangThai" asp-route-id="@tk.MaTaiKhoan" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-secondary">
+                            @(tk.TrangThai ? "Khóa" : "Mở khóa")
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

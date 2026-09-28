@@ -1,0 +1,16 @@
+@model TaiKhoan
+@{
+    ViewData["Title"] = "Chi tiết tài khoản";
+}
+
+<div class="form-card">
+    <h2>Chi tiết tài khoản</h2>
+    <dl class="detail-list">
+        <dt>Tên đăng nhập</dt><dd>@Model.TenDangNhap</dd>
+        <dt>Họ tên</dt><dd>@Model.HoTen</dd>
+        <dt>Email</dt><dd>@Model.Email</dd>
+        <dt>Vai trò</dt><dd>@Model.VaiTro</dd>
+        <dt>Trạng thái</dt><dd>@(Model.TrangThai ? "Hoạt động" : "Đã khóa")</dd>
+    </dl>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+</div>

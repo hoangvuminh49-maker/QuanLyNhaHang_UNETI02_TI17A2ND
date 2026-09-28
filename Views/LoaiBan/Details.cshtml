@@ -1,0 +1,15 @@
+@model LoaiBan
+@{
+    ViewData["Title"] = "Chi tiết loại bàn";
+}
+
+<div class="form-card">
+    <h2>Chi tiết loại bàn</h2>
+    <dl class="detail-list">
+        <dt>Tên loại bàn</dt><dd>@Model.TenLoaiBan</dd>
+        <dt>Mô tả</dt><dd>@Model.MoTa</dd>
+        <dt>Trạng thái</dt><dd>@(Model.TrangThai ? "Đang sử dụng" : "Ngừng sử dụng")</dd>
+        <dt>Số bàn thuộc loại này</dt><dd>@Model.DanhSachBanAn.Count</dd>
+    </dl>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+</div>
