@@ -1,0 +1,60 @@
+@model List<LoaiBan>
+@{
+    ViewData["Title"] = "Quản lý loại bàn";
+}
+
+<div class="page-header">
+    <h2>Quản lý loại bàn</h2>
+    <a asp-action="Create" class="btn btn-primary">+ Thêm loại bàn</a>
+</div>
+
+<form method="get" asp-action="Index" class="search-form">
+    <input type="text" name="tuKhoa" value="@ViewBag.TuKhoa" class="form-control" placeholder="Tìm theo tên loại bàn..." />
+    <button type="submit" class="btn btn-secondary">Tìm kiếm</button>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên loại bàn</th>
+            <th>Mô tả</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lb in Model)
+        {
+            <tr>
+                <td>@lb.TenLoaiBan</td>
+                <td>@lb.MoTa</td>
+                <td>
+                    @if (lb.TrangThai)
+                    {
+                        <span class="badge badge-success">Đang sử dụng</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-danger">Ngừng sử dụng</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@lb.MaLoaiBan" class="btn btn-sm btn-info">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@lb.MaLoaiBan" class="btn btn-sm btn-warning">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@lb.MaLoaiBan" class="btn btn-sm btn-danger">Xóa</a>
+                    <form asp-action="DoiTrangThai" asp-route-id="@lb.MaLoaiBan" method="post" style="display:inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-secondary">
+                            @(lb.TrangThai ? "Ngừng" : "Kích hoạt")
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <p>Chưa có loại bàn nào.</p>
+}

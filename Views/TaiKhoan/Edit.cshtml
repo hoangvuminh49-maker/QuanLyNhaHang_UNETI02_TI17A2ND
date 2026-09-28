@@ -1,0 +1,48 @@
+@model TaiKhoan
+@{
+    ViewData["Title"] = "Sửa tài khoản";
+}
+
+<div class="form-card">
+    <h2>Sửa tài khoản</h2>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="MaTaiKhoan" />
+        <div class="form-group">
+            <label asp-for="TenDangNhap"></label>
+            <input asp-for="TenDangNhap" class="form-control" />
+            <span asp-validation-for="TenDangNhap" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="MatKhau"></label>
+            <input asp-for="MatKhau" class="form-control" />
+            <span asp-validation-for="MatKhau" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="HoTen"></label>
+            <input asp-for="HoTen" class="form-control" />
+            <span asp-validation-for="HoTen" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="VaiTro"></label>
+            <select asp-for="VaiTro" asp-items="Html.GetEnumSelectList<VaiTro>()" class="form-control"></select>
+        </div>
+        <div class="form-group form-check">
+            <input asp-for="TrangThai" class="form-check-input" />
+            <label asp-for="TrangThai" class="form-check-label"></label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
