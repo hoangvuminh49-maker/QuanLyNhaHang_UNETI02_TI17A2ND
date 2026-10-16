@@ -1,23 +1,23 @@
+// Họ và tên: Đoàn Văn Hiệp
+// Mã sinh viên: 23274800003
+// Nội dung thực hiện: Entity Phiếu đặt bàn (Module 3 - Đặt bàn của khách hàng)
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace QuanLyNhaHang.Models
+namespace QuanLyNhaHang_UNETI02_TI17A2ND.Models
 {
-    // Entity: Phiếu đặt bàn
-    // Ghi chú: Nghiệp vụ đặt bàn / kiểm tra trùng lịch thuộc Module 3;
-    // xác nhận/hủy/dashboard/thống kê thuộc Module 4.
     public class PhieuDatBan
     {
         [Key]
         public int MaPhieu { get; set; }
 
-        [Required]
+        [Display(Name = "Khách hàng")]
         public int MaKhachHang { get; set; }
 
         [ForeignKey(nameof(MaKhachHang))]
         public KhachHang? KhachHang { get; set; }
 
-        [Required]
+        [Display(Name = "Bàn ăn")]
         public int MaBan { get; set; }
 
         [ForeignKey(nameof(MaBan))]
@@ -26,32 +26,33 @@ namespace QuanLyNhaHang.Models
         [Display(Name = "Ngày đặt")]
         public DateTime NgayDat { get; set; } = DateTime.Now;
 
-        [Required(ErrorMessage = "Ngày sử dụng là bắt buộc")]
+        [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Ngày sử dụng")]
         public DateTime NgaySuDung { get; set; }
 
-        [Required(ErrorMessage = "Giờ bắt đầu là bắt buộc")]
+        [Required]
         [DataType(DataType.Time)]
         [Display(Name = "Giờ bắt đầu")]
         public TimeSpan GioBatDau { get; set; }
 
-        [Required(ErrorMessage = "Giờ kết thúc là bắt buộc")]
+        [Required]
         [DataType(DataType.Time)]
         [Display(Name = "Giờ kết thúc")]
         public TimeSpan GioKetThuc { get; set; }
 
-        [Required]
         [Range(1, 100, ErrorMessage = "Số người phải lớn hơn 0")]
         [Display(Name = "Số người")]
         public int SoNguoi { get; set; }
 
         [DataType(DataType.MultilineText)]
+        [StringLength(500)]
         [Display(Name = "Ghi chú")]
         public string? GhiChu { get; set; }
 
         [Required]
+        [StringLength(20)]
         [Display(Name = "Trạng thái")]
-        public TrangThaiPhieu TrangThai { get; set; } = TrangThaiPhieu.ChoXacNhan;
+        public string TrangThai { get; set; } = Common.TrangThaiPhieu.ChoXacNhan;
     }
 }

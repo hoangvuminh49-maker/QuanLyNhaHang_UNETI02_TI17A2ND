@@ -3,30 +3,25 @@
     ViewData["Title"] = "Thêm loại bàn";
 }
 
-<div class="form-card">
-    <h2>Thêm loại bàn mới</h2>
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <form asp-action="Create" method="post">
-        <div class="form-group">
-            <label asp-for="TenLoaiBan"></label>
-            <input asp-for="TenLoaiBan" class="form-control" autofocus />
-            <span asp-validation-for="TenLoaiBan" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="MoTa"></label>
-            <textarea asp-for="MoTa" class="form-control" rows="3"></textarea>
-            <span asp-validation-for="MoTa" class="text-danger"></span>
-        </div>
-        <div class="form-group form-check">
-            <input asp-for="TrangThai" class="form-check-input" />
-            <label asp-for="TrangThai" class="form-check-label"></label>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Lưu</button>
-        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
-    </form>
-</div>
+<h2 class="mb-4">Thêm loại bàn</h2>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="TenLoaiBan" class="form-label"></label>
+        <input asp-for="TenLoaiBan" class="form-control" />
+        <span asp-validation-for="TenLoaiBan" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="MoTa" class="form-label"></label>
+        <textarea asp-for="MoTa" class="form-control" rows="4"></textarea>
+    </div>
+    <div class="form-check mb-3">
+        <input asp-for="TrangThai" class="form-check-input" />
+        <label asp-for="TrangThai" class="form-check-label"></label>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

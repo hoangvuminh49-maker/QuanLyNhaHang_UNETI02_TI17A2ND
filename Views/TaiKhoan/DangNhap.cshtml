@@ -3,28 +3,30 @@
     ViewData["Title"] = "Đăng nhập";
 }
 
-<div class="form-card">
-    <h2>Đăng nhập hệ thống</h2>
-
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <form asp-controller="TaiKhoan" asp-action="DangNhap" method="post">
-        <div class="form-group">
-            <label asp-for="TenDangNhap"></label>
-            <input asp-for="TenDangNhap" class="form-control" autofocus />
-            <span asp-validation-for="TenDangNhap" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="MatKhau"></label>
-            <input asp-for="MatKhau" class="form-control" />
-            <span asp-validation-for="MatKhau" class="text-danger"></span>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Đăng nhập</button>
-    </form>
-
-    <p class="hint">Tài khoản mẫu: <strong>admin / 123456</strong></p>
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <h2 class="mb-4">Đăng nhập</h2>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <form asp-action="DangNhap" asp-route-returnUrl="@ViewBag.ReturnUrl" method="post">
+            <div class="mb-3">
+                <label asp-for="TenDangNhap" class="form-label"></label>
+                <input asp-for="TenDangNhap" class="form-control" autofocus />
+                <span asp-validation-for="TenDangNhap" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="MatKhau" class="form-label"></label>
+                <input asp-for="MatKhau" type="password" class="form-control" />
+                <span asp-validation-for="MatKhau" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+        </form>
+        <p class="mt-3">Chưa có tài khoản? <a asp-action="DangKy">Đăng ký ngay</a></p>
+        <hr />
+        <p class="text-muted small">
+            Tài khoản demo Admin: <strong>admin</strong> / <strong>admin123</strong><br />
+            Tài khoản demo Khách hàng: <strong>khachhang01</strong> / <strong>123456</strong>
+        </p>
+    </div>
 </div>
 
 @section Scripts {

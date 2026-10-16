@@ -1,0 +1,24 @@
+@model BanAn
+@{
+    ViewData["Title"] = "Chi tiết bàn";
+}
+
+<h2 class="mb-4">@Model.TenBan</h2>
+<dl class="row">
+    <dt class="col-sm-3">Loại bàn</dt>
+    <dd class="col-sm-9">@Model.LoaiBan?.TenLoaiBan</dd>
+    <dt class="col-sm-3">Số chỗ ngồi</dt>
+    <dd class="col-sm-9">@Model.SoChoNgoi</dd>
+    <dt class="col-sm-3">Vị trí</dt>
+    <dd class="col-sm-9">@Model.ViTri</dd>
+    <dt class="col-sm-3">Mô tả</dt>
+    <dd class="col-sm-9">@Model.MoTa</dd>
+    <dt class="col-sm-3">Trạng thái</dt>
+    <dd class="col-sm-9">@TrangThaiBan.Ten(Model.TrangThai)</dd>
+</dl>
+
+@if (Model.TrangThai != "TamNgung")
+{
+    <a asp-controller="PhieuDatBan" asp-action="DatBan" asp-route-maBan="@Model.MaBan" class="btn btn-warning">Đặt bàn này</a>
+}
+<a asp-action="DanhSach" class="btn btn-secondary">Quay lại danh sách</a>

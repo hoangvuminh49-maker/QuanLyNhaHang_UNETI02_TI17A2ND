@@ -1,6 +1,9 @@
+// Họ và tên: Vũ Minh Hoàng
+// Mã sinh viên: 23203100015
+// Nội dung thực hiện: ViewModel đăng nhập (Module 1)
 using System.ComponentModel.DataAnnotations;
 
-namespace QuanLyNhaHang.Models.ViewModels
+namespace QuanLyNhaHang_UNETI02_TI17A2ND.Models.ViewModels
 {
     public class LoginViewModel
     {

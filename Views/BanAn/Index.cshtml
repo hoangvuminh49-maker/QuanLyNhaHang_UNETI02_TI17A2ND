@@ -1,0 +1,106 @@
+@model BanAnListViewModel
+@{
+    ViewData["Title"] = "Quản lý bàn ăn";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Quản lý bàn ăn</h2>
+    <a asp-action="Create" class="btn btn-success">+ Thêm bàn ăn</a>
+</div>
+
+<form method="get" asp-action="Index" class="row g-2 mb-3">
+    <div class="col-md-3">
+        <input type="text" name="tuKhoa" value="@Model.TuKhoa" class="form-control" placeholder="Tìm theo tên bàn, vị trí..." />
+    </div>
+    <div class="col-md-2">
+        <select name="maLoaiBan" class="form-select">
+            <option value="">-- Loại bàn --</option>
+            @foreach (var lb in Model.DanhSachLoaiBan)
+            {
+                <option value="@lb.MaLoaiBan" selected="@((Model.MaLoaiBan == lb.MaLoaiBan) ? "selected" : null)">@lb.TenLoaiBan</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-2">
+        <input type="number" min="1" name="soChoNgoi" value="@Model.SoChoNgoi" class="form-control" placeholder="Số chỗ tối thiểu" />
+    </div>
+    <div class="col-md-2">
+        <select name="trangThai" class="form-select">
+            <option value="">-- Trạng thái --</option>
+            <option value="SanSang" selected="@((Model.TrangThai == "SanSang") ? "selected" : null)">Sẵn sàng</option>
+            <option value="DangSuDung" selected="@((Model.TrangThai == "DangSuDung") ? "selected" : null)">Đang sử dụng</option>
+            <option value="TamNgung" selected="@((Model.TrangThai == "TamNgung") ? "selected" : null)">Tạm ngừng phục vụ</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="sapXep" class="form-select">
+            <option value="ten_az" selected="@((Model.SapXep == "ten_az" || string.IsNullOrEmpty(Model.SapXep)) ? "selected" : null)">Tên bàn A-Z</option>
+            <option value="ten_za" selected="@((Model.SapXep == "ten_za") ? "selected" : null)">Tên bàn Z-A</option>
+            <option value="cho_tang" selected="@((Model.SapXep == "cho_tang") ? "selected" : null)">Số chỗ tăng dần</option>
+            <option value="cho_giam" selected="@((Model.SapXep == "cho_giam") ? "selected" : null)">Số chỗ giảm dần</option>
+        </select>
+    </div>
+    <div class="col-md-1">
+        <button type="submit" class="btn btn-primary w-100">Lọc</button>
+    </div>
+</form>
+
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Tên bàn</th>
+            <th>Loại bàn</th>
+            <th>Số chỗ</th>
+            <th>Vị trí</th>
+            <th>Trạng thái</th>
+            <th style="width:280px">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ban in Model.DanhSachBan)
+        {
+            <tr>
+                <td>@ban.TenBan</td>
+                <td>@ban.LoaiBan?.TenLoaiBan</td>
+                <td>@ban.SoChoNgoi</td>
+                <td>@ban.ViTri</td>
+                <td><span class="badge bg-info text-dark badge-trangthai">@TrangThaiBan.Ten(ban.TrangThai)</span></td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@ban.MaBan" class="btn btn-sm btn-info">Chi tiết</a>
+                    <a asp-action="Edit" asp-route-id="@ban.MaBan" class="btn btn-sm btn-warning">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@ban.MaBan" class="btn btn-sm btn-danger">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var ds = Model.DanhSachBan;
+}
+<nav>
+    <ul class="pagination">
+        <li class="page-item @(ds.CoTrangTruoc ? "" : "disabled")">
+            <a class="page-link" asp-action="Index"
+               asp-route-tuKhoa="@Model.TuKhoa" asp-route-maLoaiBan="@Model.MaLoaiBan"
+               asp-route-soChoNgoi="@Model.SoChoNgoi" asp-route-trangThai="@Model.TrangThai"
+               asp-route-sapXep="@Model.SapXep" asp-route-trang="@(ds.TrangHienTai - 1)">« Trước</a>
+        </li>
+        @for (int i = 1; i <= ds.TongSoTrang; i++)
+        {
+            <li class="page-item @(i == ds.TrangHienTai ? "active" : "")">
+                <a class="page-link" asp-action="Index"
+                   asp-route-tuKhoa="@Model.TuKhoa" asp-route-maLoaiBan="@Model.MaLoaiBan"
+                   asp-route-soChoNgoi="@Model.SoChoNgoi" asp-route-trangThai="@Model.TrangThai"
+                   asp-route-sapXep="@Model.SapXep" asp-route-trang="@i">@i</a>
+            </li>
+        }
+        <li class="page-item @(ds.CoTrangSau ? "" : "disabled")">
+            <a class="page-link" asp-action="Index"
+               asp-route-tuKhoa="@Model.TuKhoa" asp-route-maLoaiBan="@Model.MaLoaiBan"
+               asp-route-soChoNgoi="@Model.SoChoNgoi" asp-route-trangThai="@Model.TrangThai"
+               asp-route-sapXep="@Model.SapXep" asp-route-trang="@(ds.TrangHienTai + 1)">Sau »</a>
+        </li>
+    </ul>
+    <p class="text-muted">Trang @ds.TrangHienTai / @ds.TongSoTrang - Tổng số @ds.TongSoDong bàn</p>
+</nav>

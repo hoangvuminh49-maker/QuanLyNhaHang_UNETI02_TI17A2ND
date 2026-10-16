@@ -1,0 +1,25 @@
+@model List<MonAn>
+@{
+    ViewData["Title"] = "Thực đơn";
+}
+
+<h2 class="mb-4">Thực đơn nhà hàng</h2>
+
+@foreach (var nhom in Model.GroupBy(m => m.LoaiMon))
+{
+    <h4 class="mt-4">@nhom.Key</h4>
+    <div class="row row-cols-1 row-cols-md-3 g-3">
+        @foreach (var mon in nhom)
+        {
+            <div class="col">
+                <div class="card card-monan shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">@mon.TenMon</h5>
+                        <p class="card-text fw-bold text-danger">@mon.DonGia.ToString("#,##0") đ</p>
+                        <p class="card-text">@mon.MoTa</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

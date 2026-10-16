@@ -1,0 +1,17 @@
+@model BanAn
+@{
+    ViewData["Title"] = "Xóa bàn ăn";
+}
+
+<h2 class="mb-4 text-danger">Xóa bàn ăn</h2>
+<p>Bạn có chắc chắn muốn xóa bàn ăn sau không?</p>
+<dl class="row">
+    <dt class="col-sm-3">Tên bàn</dt>
+    <dd class="col-sm-9">@Model.TenBan</dd>
+    <dt class="col-sm-3">Loại bàn</dt>
+    <dd class="col-sm-9">@Model.LoaiBan?.TenLoaiBan</dd>
+</dl>
+<form asp-action="Delete" asp-route-id="@Model.MaBan" method="post">
+    <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>
