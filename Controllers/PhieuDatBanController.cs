@@ -1,6 +1,6 @@
-// Họ và tên: Đoàn Văn Hiệp
-// Mã sinh viên: 23274800003
-// Nội dung thực hiện: Đặt bàn của khách hàng, lịch sử đặt bàn (Module 3)
+// Họ và tên: Đoàn Văn Hiệp, Nguyễn Huy Hoàng 
+// Mã sinh viên: 23274800003 ,22203100058
+// Nội dung thực hiện: Đặt bàn của khách hàng, lịch sử đặt bàn (Module 3) và Quản lý phiếu đặt bàn - Xác nhận, Hủy, Cập nhật trạng thái sử dụng bàn (Module 4)
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -152,6 +152,171 @@ namespace QuanLyNhaHang_UNETI02_TI17A2ND.Controllers
                 return StatusCode(403);
 
             return View(phieu);
+        }
+
+        // ================= KHU VỰC ADMIN =================
+
+        [AdminOnly]
+        public async Task<IActionResult> Index(string? tenKhachHang, string? tenBan, string? trangThai, DateTime? ngaySuDung, int trang = 1)
+        {
+            var query = _context.PhieuDatBans
+                .Include(p => p.KhachHang)
+                .Include(p => p.BanAn)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(tenKhachHang))
+                query = query.Where(p => p.KhachHang != null && p.KhachHang.HoTen.Contains(tenKhachHang));
+
+            if (!string.IsNullOrWhiteSpace(tenBan))
+                query = query.Where(p => p.BanAn != null && p.BanAn.TenBan.Contains(tenBan));
+
+            if (!string.IsNullOrEmpty(trangThai))
+                query = query.Where(p => p.TrangThai == trangThai);
+
+            if (ngaySuDung.HasValue)
+                query = query.Where(p => p.NgaySuDung.Date == ngaySuDung.Value.Date);
+
+            query = query.OrderByDescending(p => p.NgayDat);
+
+            var danhSach = await PagedList<PhieuDatBan>.CreateAsync(query, trang, 10);
+
+            ViewBag.TenKhachHang = tenKhachHang;
+            ViewBag.TenBan = tenBan;
+            ViewBag.TrangThai = trangThai;
+            ViewBag.NgaySuDung = ngaySuDung?.ToString("yyyy-MM-dd");
+
+            return View(danhSach);
+        }
+
+        [AdminOnly]
+        public async Task<IActionResult> Details(int id)
+        {
+            var phieu = await _context.PhieuDatBans
+                .Include(p => p.BanAn)!.ThenInclude(b => b!.LoaiBan)
+                .Include(p => p.KhachHang)
+                .FirstOrDefaultAsync(p => p.MaPhieu == id);
+
+            if (phieu == null) return NotFound();
+            return View(phieu);
+        }
+
+        [AdminOnly]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> XacNhan(int id)
+        {
+            var phieu = await _context.PhieuDatBans
+                .Include(p => p.BanAn).Include(p => p.KhachHang)
+                .FirstOrDefaultAsync(p => p.MaPhieu == id);
+            if (phieu == null) return NotFound();
+
+            if (phieu.TrangThai != TrangThaiPhieu.ChoXacNhan)
+            {
+                TempData["Loi"] = "Chỉ có thể xác nhận phiếu đang ở trạng thái Chờ xác nhận.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            if (phieu.KhachHang == null || !phieu.KhachHang.TrangThai)
+            {
+                TempData["Loi"] = "Khách hàng không còn hoạt động.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            if (phieu.BanAn == null || phieu.BanAn.TrangThai == TrangThaiBan.TamNgung)
+            {
+                TempData["Loi"] = "Bàn không còn phục vụ.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            if (phieu.SoNguoi > phieu.BanAn.SoChoNgoi)
+            {
+                TempData["Loi"] = "Số người vượt quá sức chứa của bàn.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            if (phieu.NgaySuDung.Date < DateTime.Today)
+            {
+                TempData["Loi"] = "Ngày sử dụng không hợp lệ.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+            if (await TrungLichAsync(phieu.MaBan, phieu.NgaySuDung, phieu.GioBatDau, phieu.GioKetThuc, phieu.MaPhieu))
+            {
+                TempData["Loi"] = "Không thể xác nhận vì trùng lịch với một phiếu khác.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            phieu.TrangThai = TrangThaiPhieu.DaXacNhan;
+            await _context.SaveChangesAsync();
+            TempData["ThongBao"] = "Xác nhận đặt bàn thành công.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [AdminOnly]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Huy(int id)
+        {
+            var phieu = await _context.PhieuDatBans.FindAsync(id);
+            if (phieu == null) return NotFound();
+
+            if (phieu.TrangThai == TrangThaiPhieu.DaSuDung || phieu.TrangThai == TrangThaiPhieu.DaHuy)
+            {
+                TempData["Loi"] = "Không thể hủy phiếu ở trạng thái hiện tại.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            phieu.TrangThai = TrangThaiPhieu.DaHuy;
+            await _context.SaveChangesAsync();
+            TempData["ThongBao"] = "Hủy phiếu đặt bàn thành công.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [AdminOnly]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DangSuDungBan(int id)
+        {
+            var phieu = await _context.PhieuDatBans.Include(p => p.BanAn).FirstOrDefaultAsync(p => p.MaPhieu == id);
+            if (phieu == null) return NotFound();
+
+            if (phieu.TrangThai != TrangThaiPhieu.DaXacNhan)
+            {
+                TempData["Loi"] = "Chỉ có thể cập nhật bàn đang sử dụng cho phiếu đã xác nhận.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            if (phieu.BanAn != null) phieu.BanAn.TrangThai = TrangThaiBan.DangSuDung;
+            await _context.SaveChangesAsync();
+            TempData["ThongBao"] = "Cập nhật bàn sang trạng thái Đang sử dụng.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        [AdminOnly]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CapNhatDaSuDung(int id)
+        {
+            var phieu = await _context.PhieuDatBans.Include(p => p.BanAn).FirstOrDefaultAsync(p => p.MaPhieu == id);
+            if (phieu == null) return NotFound();
+
+            if (phieu.TrangThai != TrangThaiPhieu.DaXacNhan)
+            {
+                TempData["Loi"] = "Chỉ có thể cập nhật Đã sử dụng cho phiếu đã xác nhận.";
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            phieu.TrangThai = TrangThaiPhieu.DaSuDung;
+
+            if (phieu.BanAn != null)
+            {
+                // Đưa bàn về Sẵn sàng nếu không còn phiếu nào khác đang chiếm bàn hôm nay
+                bool conPhieuKhacDangChiemBan = await _context.PhieuDatBans.AnyAsync(p =>
+                    p.MaBan == phieu.MaBan && p.MaPhieu != phieu.MaPhieu &&
+                    p.NgaySuDung.Date == DateTime.Today && p.TrangThai == TrangThaiPhieu.DaXacNhan);
+
+                if (!conPhieuKhacDangChiemBan)
+                    phieu.BanAn.TrangThai = TrangThaiBan.SanSang;
+            }
+
+            await _context.SaveChangesAsync();
+            TempData["ThongBao"] = "Cập nhật trạng thái Đã sử dụng thành công.";
+            return RedirectToAction(nameof(Details), new { id });
         }
     }
 }

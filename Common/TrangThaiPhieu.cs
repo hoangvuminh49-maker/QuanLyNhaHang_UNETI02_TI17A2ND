@@ -1,6 +1,6 @@
-// Họ và tên: Đoàn Văn Hiệp
-// Mã sinh viên: 23274800003
-// Nội dung thực hiện: Hằng số trạng thái phiếu đặt bàn (Module 3)
+// Họ và tên: Đoàn Văn Hiệp, Nguyễn Huy Hoàng
+// Mã sinh viên: 23274800003,22203100058 
+// Nội dung thực hiện: Hằng số trạng thái phiếu đặt bàn (Module 3 - Module 4)
 namespace QuanLyNhaHang_UNETI02_TI17A2ND.Common
 {
     public static class TrangThaiPhieu
