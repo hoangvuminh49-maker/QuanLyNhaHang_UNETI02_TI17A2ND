@@ -3,29 +3,15 @@
     ViewData["Title"] = "Xóa loại bàn";
 }
 
-<div class="form-card">
-    <h2>Xác nhận xóa loại bàn</h2>
-
-    @if (ViewBag.DangDuocSuDung == true)
-    {
-        <div class="alert alert-danger">
-            ⚠️ Loại bàn này đang có bàn ăn sử dụng (@Model.DanhSachBanAn.Count bàn). Không thể xóa cho đến khi
-            chuyển/xóa hết các bàn thuộc loại này.
-        </div>
-    }
-    else
-    {
-        <p>Bạn có chắc chắn muốn xóa loại bàn <strong>@Model.TenLoaiBan</strong> không?</p>
-    }
-
-    <dl class="detail-list">
-        <dt>Tên loại bàn</dt><dd>@Model.TenLoaiBan</dd>
-        <dt>Mô tả</dt><dd>@Model.MoTa</dd>
-    </dl>
-
-    <form asp-action="Delete" method="post">
-        <input type="hidden" asp-for="MaLoaiBan" />
-        <button type="submit" class="btn btn-danger" @(ViewBag.DangDuocSuDung == true ? "disabled" : "")>Xóa</button>
-        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
-    </form>
-</div>
+<h2 class="mb-4 text-danger">Xóa loại bàn</h2>
+<p>Bạn có chắc chắn muốn xóa loại bàn sau không?</p>
+<dl class="row">
+    <dt class="col-sm-3">Tên loại bàn</dt>
+    <dd class="col-sm-9">@Model.TenLoaiBan</dd>
+    <dt class="col-sm-3">Mô tả</dt>
+    <dd class="col-sm-9">@Model.MoTa</dd>
+</dl>
+<form asp-action="Delete" asp-route-id="@Model.MaLoaiBan" method="post">
+    <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

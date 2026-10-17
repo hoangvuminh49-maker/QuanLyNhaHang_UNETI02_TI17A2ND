@@ -2,7 +2,30 @@
     ViewData["Title"] = "Trang chủ";
 }
 
-<div class="hero">
-    <h1>Chào mừng đến với hệ thống Quản lý nhà hàng &amp; Đặt bàn</h1>
-    <p>Đề tài 07 - ASP.NET Core 10 MVC</p>
+<div class="p-5 mb-4 bg-dark text-white rounded-3">
+    <div class="container-fluid py-4">
+        <h1 class="display-6 fw-bold">Chào mừng đến với Nhà Hàng UNETI</h1>
+        <p class="col-md-8 fs-5">
+            Đặt bàn nhanh chóng, xem thực đơn đa dạng và tận hưởng không gian ẩm thực đẳng cấp.
+        </p>
+        <a class="btn btn-warning btn-lg" asp-controller="BanAn" asp-action="DanhSach">Xem danh sách bàn</a>
+        <a class="btn btn-outline-light btn-lg" asp-controller="MonAn" asp-action="ThucDon">Xem thực đơn</a>
+    </div>
+</div>
+
+<h3 class="mb-3">Món ăn nổi bật</h3>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var mon in (List<MonAn>)ViewBag.MonNoiBat)
+    {
+        <div class="col">
+            <div class="card card-monan shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">@mon.TenMon</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@mon.LoaiMon</h6>
+                    <p class="card-text fw-bold text-danger">@mon.DonGia.ToString("#,##0") đ</p>
+                    <p class="card-text">@mon.MoTa</p>
+                </div>
+            </div>
+        </div>
+    }
 </div>

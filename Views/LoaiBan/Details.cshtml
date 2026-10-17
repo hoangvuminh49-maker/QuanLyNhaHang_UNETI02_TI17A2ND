@@ -3,13 +3,14 @@
     ViewData["Title"] = "Chi tiết loại bàn";
 }
 
-<div class="form-card">
-    <h2>Chi tiết loại bàn</h2>
-    <dl class="detail-list">
-        <dt>Tên loại bàn</dt><dd>@Model.TenLoaiBan</dd>
-        <dt>Mô tả</dt><dd>@Model.MoTa</dd>
-        <dt>Trạng thái</dt><dd>@(Model.TrangThai ? "Đang sử dụng" : "Ngừng sử dụng")</dd>
-        <dt>Số bàn thuộc loại này</dt><dd>@Model.DanhSachBanAn.Count</dd>
-    </dl>
-    <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
-</div>
+<h2 class="mb-4">Chi tiết loại bàn</h2>
+<dl class="row">
+    <dt class="col-sm-3">Tên loại bàn</dt>
+    <dd class="col-sm-9">@Model.TenLoaiBan</dd>
+    <dt class="col-sm-3">Mô tả</dt>
+    <dd class="col-sm-9">@Model.MoTa</dd>
+    <dt class="col-sm-3">Trạng thái</dt>
+    <dd class="col-sm-9">@(Model.TrangThai ? "Đang sử dụng" : "Ngừng sử dụng")</dd>
+</dl>
+<a asp-action="Edit" asp-route-id="@Model.MaLoaiBan" class="btn btn-warning">Sửa</a>
+<a asp-action="Index" class="btn btn-secondary">Quay lại</a>

@@ -1,16 +1,15 @@
-// Họ và tên: [Điền tên Thành viên 1]
-// Mã sinh viên: [Điền MSSV]
-// Nội dung thực hiện: Quản lý Loại bàn (CRUD)
-
+// Họ và tên: Vũ Minh Hoàng
+// Mã sinh viên: 23203100015
+// Nội dung thực hiện: Controller Quản lý loại bàn - CRUD và cập nhật trạng thái (Module 1)
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using QuanLyNhaHang.Data;
-using QuanLyNhaHang.Filters;
-using QuanLyNhaHang.Models;
+using QuanLyNhaHang_UNETI02_TI17A2ND.Common;
+using QuanLyNhaHang_UNETI02_TI17A2ND.Data;
+using QuanLyNhaHang_UNETI02_TI17A2ND.Models;
 
-namespace QuanLyNhaHang.Controllers
+namespace QuanLyNhaHang_UNETI02_TI17A2ND.Controllers
 {
-    [SessionAuthorize(VaiTro.Admin)] // Toàn bộ controller chỉ Admin được truy cập
+    [AdminOnly]
     public class LoaiBanController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -20,65 +19,39 @@ namespace QuanLyNhaHang.Controllers
             _context = context;
         }
 
-        // GET: /LoaiBan
-        public async Task<IActionResult> Index(string? tuKhoa)
+        public async Task<IActionResult> Index()
         {
-            var query = _context.LoaiBans.AsQueryable();
-
-            if (!string.IsNullOrWhiteSpace(tuKhoa))
-            {
-                query = query.Where(l => l.TenLoaiBan.Contains(tuKhoa));
-            }
-
-            var danhSach = await query
-                .OrderBy(l => l.TenLoaiBan)
-                .ToListAsync();
-
-            ViewBag.TuKhoa = tuKhoa;
+            var danhSach = await _context.LoaiBans.OrderBy(l => l.TenLoaiBan).ToListAsync();
             return View(danhSach);
         }
 
-        // GET: /LoaiBan/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var loaiBan = await _context.LoaiBans
-                .Include(l => l.DanhSachBanAn)
-                .FirstOrDefaultAsync(l => l.MaLoaiBan == id);
-
+            var loaiBan = await _context.LoaiBans.FirstOrDefaultAsync(l => l.MaLoaiBan == id);
             if (loaiBan == null) return NotFound();
             return View(loaiBan);
         }
 
-        // GET: /LoaiBan/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: /LoaiBan/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LoaiBan model)
         {
-            bool trungTen = await _context.LoaiBans
-                .AnyAsync(l => l.TenLoaiBan == model.TenLoaiBan);
-            if (trungTen)
-            {
+            if (await _context.LoaiBans.AnyAsync(l => l.TenLoaiBan == model.TenLoaiBan))
                 ModelState.AddModelError(nameof(model.TenLoaiBan), "Tên loại bàn đã tồn tại.");
-            }
 
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            if (!ModelState.IsValid) return View(model);
 
-            _context.LoaiBans.Add(model);
+            _context.Add(model);
             await _context.SaveChangesAsync();
             TempData["ThongBao"] = "Thêm loại bàn thành công.";
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /LoaiBan/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var loaiBan = await _context.LoaiBans.FindAsync(id);
@@ -86,70 +59,51 @@ namespace QuanLyNhaHang.Controllers
             return View(loaiBan);
         }
 
-        // POST: /LoaiBan/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, LoaiBan model)
         {
             if (id != model.MaLoaiBan) return NotFound();
 
-            bool trungTen = await _context.LoaiBans
-                .AnyAsync(l => l.TenLoaiBan == model.TenLoaiBan && l.MaLoaiBan != id);
-            if (trungTen)
-            {
+            if (await _context.LoaiBans.AnyAsync(l => l.TenLoaiBan == model.TenLoaiBan && l.MaLoaiBan != id))
                 ModelState.AddModelError(nameof(model.TenLoaiBan), "Tên loại bàn đã tồn tại.");
-            }
 
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            if (!ModelState.IsValid) return View(model);
 
             try
             {
-                _context.LoaiBans.Update(model);
+                _context.Update(model);
                 await _context.SaveChangesAsync();
-                TempData["ThongBao"] = "Cập nhật loại bàn thành công.";
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await _context.LoaiBans.AnyAsync(l => l.MaLoaiBan == id))
-                    return NotFound();
+                if (!await _context.LoaiBans.AnyAsync(l => l.MaLoaiBan == id)) return NotFound();
                 throw;
             }
 
+            TempData["ThongBao"] = "Cập nhật loại bàn thành công.";
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /LoaiBan/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var loaiBan = await _context.LoaiBans
-                .Include(l => l.DanhSachBanAn)
-                .FirstOrDefaultAsync(l => l.MaLoaiBan == id);
-
+            var loaiBan = await _context.LoaiBans.FirstOrDefaultAsync(l => l.MaLoaiBan == id);
             if (loaiBan == null) return NotFound();
-
-            // Cảnh báo trước cho người dùng nếu loại bàn đang có bàn ăn sử dụng
-            ViewBag.DangDuocSuDung = loaiBan.DanhSachBanAn.Any();
             return View(loaiBan);
         }
 
-        // POST: /LoaiBan/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var loaiBan = await _context.LoaiBans
-                .Include(l => l.DanhSachBanAn)
-                .FirstOrDefaultAsync(l => l.MaLoaiBan == id);
-
+            var loaiBan = await _context.LoaiBans.FindAsync(id);
             if (loaiBan == null) return NotFound();
 
-            // Nghiệp vụ bắt buộc: không cho xóa Loại bàn nếu đang có Bàn ăn thuộc loại này
-            if (loaiBan.DanhSachBanAn.Any())
+            // Không được xóa loại bàn nếu còn Bàn ăn thuộc loại này
+            bool conBanAn = await _context.BanAns.AnyAsync(b => b.MaLoaiBan == id);
+            if (conBanAn)
             {
-                TempData["Loi"] = $"Không thể xóa \"{loaiBan.TenLoaiBan}\" vì đang có {loaiBan.DanhSachBanAn.Count} bàn ăn thuộc loại này.";
+                TempData["Loi"] = "Không thể xóa loại bàn vì vẫn còn bàn ăn thuộc loại này.";
                 return RedirectToAction(nameof(Index));
             }
 
@@ -159,10 +113,9 @@ namespace QuanLyNhaHang.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: /LoaiBan/DoiTrangThai/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DoiTrangThai(int id)
+        public async Task<IActionResult> CapNhatTrangThai(int id)
         {
             var loaiBan = await _context.LoaiBans.FindAsync(id);
             if (loaiBan == null) return NotFound();

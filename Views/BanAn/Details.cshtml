@@ -1,0 +1,22 @@
+@model BanAn
+@{
+    ViewData["Title"] = "Chi tiết bàn ăn";
+}
+
+<h2 class="mb-4">Chi tiết bàn ăn</h2>
+<dl class="row">
+    <dt class="col-sm-3">Tên bàn</dt>
+    <dd class="col-sm-9">@Model.TenBan</dd>
+    <dt class="col-sm-3">Loại bàn</dt>
+    <dd class="col-sm-9">@Model.LoaiBan?.TenLoaiBan</dd>
+    <dt class="col-sm-3">Số chỗ ngồi</dt>
+    <dd class="col-sm-9">@Model.SoChoNgoi</dd>
+    <dt class="col-sm-3">Vị trí</dt>
+    <dd class="col-sm-9">@Model.ViTri</dd>
+    <dt class="col-sm-3">Mô tả</dt>
+    <dd class="col-sm-9">@Model.MoTa</dd>
+    <dt class="col-sm-3">Trạng thái</dt>
+    <dd class="col-sm-9">@TrangThaiBan.Ten(Model.TrangThai)</dd>
+</dl>
+<a asp-action="Edit" asp-route-id="@Model.MaBan" class="btn btn-warning">Sửa</a>
+<a asp-action="Index" class="btn btn-secondary">Quay lại</a>

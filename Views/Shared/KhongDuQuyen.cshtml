@@ -1,0 +1,10 @@
+@{
+    ViewData["Title"] = "Không đủ quyền truy cập";
+    Layout = "_Layout";
+}
+
+<div class="alert alert-danger">
+    <h4 class="alert-heading">403 - Không đủ quyền truy cập</h4>
+    <p>Bạn không có quyền truy cập chức năng này.</p>
+</div>
+<a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Về trang chủ</a>

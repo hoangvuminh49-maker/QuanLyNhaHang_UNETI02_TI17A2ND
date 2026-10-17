@@ -1,0 +1,62 @@
+@model KhachHang
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+
+<h2 class="mb-4">Thông tin cá nhân</h2>
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <form asp-action="ThongTinCaNhan" method="post">
+            <input type="hidden" asp-for="MaKhachHang" />
+            <input type="hidden" asp-for="MaTaiKhoan" />
+            <input type="hidden" asp-for="NgayDangKy" />
+            <input type="hidden" asp-for="TrangThai" />
+
+            <div class="mb-3">
+                <label asp-for="HoTen" class="form-label"></label>
+                <input asp-for="HoTen" class="form-control" />
+                <span asp-validation-for="HoTen" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="NgaySinh" class="form-label"></label>
+                    <input asp-for="NgaySinh" type="date" class="form-control" />
+                    <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="GioiTinh" class="form-label"></label>
+                    <select asp-for="GioiTinh" class="form-select">
+                        <option value="">-- Chọn giới tính --</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="SoDienThoai" class="form-label"></label>
+                    <input asp-for="SoDienThoai" class="form-control" />
+                    <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="DiaChi" class="form-label"></label>
+                <textarea asp-for="DiaChi" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="DiaChi" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

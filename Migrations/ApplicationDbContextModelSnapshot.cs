@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using QuanLyNhaHang.Data;
+using QuanLyNhaHang_UNETI02_TI17A2ND.Data;
 
 #nullable disable
 
-namespace QuanLyNhaHang.Migrations
+namespace QuanLyNhaHang_UNETI02_TI17A2ND.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -17,12 +17,12 @@ namespace QuanLyNhaHang.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasAnnotation("ProductVersion", "10.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.BanAn", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.BanAn", b =>
                 {
                     b.Property<int>("MaBan")
                         .ValueGeneratedOnAdd()
@@ -44,12 +44,14 @@ namespace QuanLyNhaHang.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("TrangThai")
-                        .HasColumnType("int");
+                    b.Property<string>("TrangThai")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("ViTri")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("MaBan");
 
@@ -61,7 +63,7 @@ namespace QuanLyNhaHang.Migrations
                     b.ToTable("BanAns");
                 });
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.KhachHang", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.KhachHang", b =>
                 {
                     b.Property<int>("MaKhachHang")
                         .ValueGeneratedOnAdd()
@@ -70,8 +72,8 @@ namespace QuanLyNhaHang.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaKhachHang"));
 
                     b.Property<string>("DiaChi")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(100)
@@ -96,8 +98,8 @@ namespace QuanLyNhaHang.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SoDienThoai")
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<bool>("TrangThai")
                         .HasColumnType("bit");
@@ -110,7 +112,7 @@ namespace QuanLyNhaHang.Migrations
                     b.ToTable("KhachHangs");
                 });
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.LoaiBan", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.LoaiBan", b =>
                 {
                     b.Property<int>("MaLoaiBan")
                         .ValueGeneratedOnAdd()
@@ -135,39 +137,9 @@ namespace QuanLyNhaHang.Migrations
                         .IsUnique();
 
                     b.ToTable("LoaiBans");
-
-                    b.HasData(
-                        new
-                        {
-                            MaLoaiBan = 1,
-                            MoTa = "Bàn tiêu chuẩn cho khách lẻ",
-                            TenLoaiBan = "Bàn thường",
-                            TrangThai = true
-                        },
-                        new
-                        {
-                            MaLoaiBan = 2,
-                            MoTa = "Bàn phòng riêng cao cấp",
-                            TenLoaiBan = "Bàn VIP",
-                            TrangThai = true
-                        },
-                        new
-                        {
-                            MaLoaiBan = 3,
-                            MoTa = "Bàn khu vực sân vườn",
-                            TenLoaiBan = "Bàn ngoài trời",
-                            TrangThai = true
-                        },
-                        new
-                        {
-                            MaLoaiBan = 4,
-                            MoTa = "Bàn dành cho đoàn/tiệc đông người",
-                            TenLoaiBan = "Bàn nhóm lớn",
-                            TrangThai = true
-                        });
                 });
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.MonAn", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.MonAn", b =>
                 {
                     b.Property<int>("MaMon")
                         .ValueGeneratedOnAdd()
@@ -188,8 +160,8 @@ namespace QuanLyNhaHang.Migrations
 
                     b.Property<string>("TenMon")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<bool>("TrangThai")
                         .HasColumnType("bit");
@@ -199,7 +171,7 @@ namespace QuanLyNhaHang.Migrations
                     b.ToTable("MonAns");
                 });
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.PhieuDatBan", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.PhieuDatBan", b =>
                 {
                     b.Property<int>("MaPhieu")
                         .ValueGeneratedOnAdd()
@@ -208,7 +180,8 @@ namespace QuanLyNhaHang.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MaPhieu"));
 
                     b.Property<string>("GhiChu")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<TimeSpan>("GioBatDau")
                         .HasColumnType("time");
@@ -231,8 +204,10 @@ namespace QuanLyNhaHang.Migrations
                     b.Property<int>("SoNguoi")
                         .HasColumnType("int");
 
-                    b.Property<int>("TrangThai")
-                        .HasColumnType("int");
+                    b.Property<string>("TrangThai")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("MaPhieu");
 
@@ -243,7 +218,7 @@ namespace QuanLyNhaHang.Migrations
                     b.ToTable("PhieuDatBans");
                 });
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.TaiKhoan", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.TaiKhoan", b =>
                 {
                     b.Property<int>("MaTaiKhoan")
                         .ValueGeneratedOnAdd()
@@ -274,8 +249,10 @@ namespace QuanLyNhaHang.Migrations
                     b.Property<bool>("TrangThai")
                         .HasColumnType("bit");
 
-                    b.Property<int>("VaiTro")
-                        .HasColumnType("int");
+                    b.Property<string>("VaiTro")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("MaTaiKhoan");
 
@@ -283,24 +260,12 @@ namespace QuanLyNhaHang.Migrations
                         .IsUnique();
 
                     b.ToTable("TaiKhoans");
-
-                    b.HasData(
-                        new
-                        {
-                            MaTaiKhoan = 1,
-                            Email = "admin@nhahang.com",
-                            HoTen = "Quản trị viên",
-                            MatKhau = "123456",
-                            TenDangNhap = "admin",
-                            TrangThai = true,
-                            VaiTro = 1
-                        });
                 });
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.BanAn", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.BanAn", b =>
                 {
-                    b.HasOne("QuanLyNhaHang.Models.LoaiBan", "LoaiBan")
-                        .WithMany("DanhSachBanAn")
+                    b.HasOne("QuanLyNhaHang_UNETI02_TI17A2ND.Models.LoaiBan", "LoaiBan")
+                        .WithMany("BanAns")
                         .HasForeignKey("MaLoaiBan")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -308,27 +273,27 @@ namespace QuanLyNhaHang.Migrations
                     b.Navigation("LoaiBan");
                 });
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.KhachHang", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.KhachHang", b =>
                 {
-                    b.HasOne("QuanLyNhaHang.Models.TaiKhoan", "TaiKhoan")
+                    b.HasOne("QuanLyNhaHang_UNETI02_TI17A2ND.Models.TaiKhoan", "TaiKhoan")
                         .WithOne("KhachHang")
-                        .HasForeignKey("QuanLyNhaHang.Models.KhachHang", "MaTaiKhoan")
+                        .HasForeignKey("QuanLyNhaHang_UNETI02_TI17A2ND.Models.KhachHang", "MaTaiKhoan")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("TaiKhoan");
                 });
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.PhieuDatBan", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.PhieuDatBan", b =>
                 {
-                    b.HasOne("QuanLyNhaHang.Models.BanAn", "BanAn")
-                        .WithMany("DanhSachPhieuDatBan")
+                    b.HasOne("QuanLyNhaHang_UNETI02_TI17A2ND.Models.BanAn", "BanAn")
+                        .WithMany("PhieuDatBans")
                         .HasForeignKey("MaBan")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("QuanLyNhaHang.Models.KhachHang", "KhachHang")
-                        .WithMany("DanhSachPhieuDatBan")
+                    b.HasOne("QuanLyNhaHang_UNETI02_TI17A2ND.Models.KhachHang", "KhachHang")
+                        .WithMany("PhieuDatBans")
                         .HasForeignKey("MaKhachHang")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -338,22 +303,22 @@ namespace QuanLyNhaHang.Migrations
                     b.Navigation("KhachHang");
                 });
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.BanAn", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.BanAn", b =>
                 {
-                    b.Navigation("DanhSachPhieuDatBan");
+                    b.Navigation("PhieuDatBans");
                 });
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.KhachHang", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.KhachHang", b =>
                 {
-                    b.Navigation("DanhSachPhieuDatBan");
+                    b.Navigation("PhieuDatBans");
                 });
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.LoaiBan", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.LoaiBan", b =>
                 {
-                    b.Navigation("DanhSachBanAn");
+                    b.Navigation("BanAns");
                 });
 
-            modelBuilder.Entity("QuanLyNhaHang.Models.TaiKhoan", b =>
+            modelBuilder.Entity("QuanLyNhaHang_UNETI02_TI17A2ND.Models.TaiKhoan", b =>
                 {
                     b.Navigation("KhachHang");
                 });

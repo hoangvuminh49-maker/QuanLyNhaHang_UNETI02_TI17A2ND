@@ -1,0 +1,41 @@
+@model MonAn
+@{
+    ViewData["Title"] = "Sửa món ăn";
+}
+
+<h2 class="mb-4">Sửa món ăn</h2>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="Edit" asp-route-id="@Model.MaMon" method="post">
+    <input type="hidden" asp-for="MaMon" />
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="TenMon" class="form-label"></label>
+            <input asp-for="TenMon" class="form-control" />
+            <span asp-validation-for="TenMon" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="LoaiMon" class="form-label"></label>
+            <input asp-for="LoaiMon" class="form-control" />
+            <span asp-validation-for="LoaiMon" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="DonGia" class="form-label"></label>
+        <input asp-for="DonGia" type="number" step="1000" min="0" class="form-control" />
+        <span asp-validation-for="DonGia" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="MoTa" class="form-label"></label>
+        <textarea asp-for="MoTa" class="form-control" rows="3"></textarea>
+    </div>
+    <div class="form-check mb-3">
+        <input asp-for="TrangThai" class="form-check-input" />
+        <label asp-for="TrangThai" class="form-check-label">Đang phục vụ</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Lưu</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

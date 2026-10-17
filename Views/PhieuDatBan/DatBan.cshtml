@@ -1,0 +1,47 @@
+@model DangKyDatBanViewModel
+@{
+    ViewData["Title"] = "Đặt bàn";
+}
+
+<h2 class="mb-4">Đặt bàn</h2>
+<div asp-validation-summary="All" class="text-danger"></div>
+<form asp-action="DatBan" method="post" class="col-md-7">
+    <div class="mb-3">
+        <label asp-for="MaBan" class="form-label"></label>
+        <select asp-for="MaBan" class="form-select" asp-items="ViewBag.DanhSachBan">
+            <option value="">-- Chọn bàn --</option>
+        </select>
+        <span asp-validation-for="MaBan" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <label asp-for="NgaySuDung" class="form-label"></label>
+            <input asp-for="NgaySuDung" type="date" class="form-control" />
+            <span asp-validation-for="NgaySuDung" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="GioBatDau" class="form-label"></label>
+            <input asp-for="GioBatDau" type="time" class="form-control" />
+            <span asp-validation-for="GioBatDau" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label asp-for="GioKetThuc" class="form-label"></label>
+            <input asp-for="GioKetThuc" type="time" class="form-control" />
+            <span asp-validation-for="GioKetThuc" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="SoNguoi" class="form-label"></label>
+        <input asp-for="SoNguoi" type="number" min="1" class="form-control" />
+        <span asp-validation-for="SoNguoi" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="GhiChu" class="form-label"></label>
+        <textarea asp-for="GhiChu" class="form-control" rows="3"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Xác nhận đặt bàn</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
